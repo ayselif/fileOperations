@@ -1,0 +1,3 @@
+Eren Demir;eren.demir@sekizbit.com.tr;123456
+Burak Erşen;burak.ersen@sekizbit.com.tr;223344
+Elif Vural;elifvural@gmail.com;1236447

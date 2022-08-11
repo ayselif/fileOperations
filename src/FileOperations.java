@@ -118,7 +118,7 @@ public class FileOperations {
     }
 
     public static void main(String[] args) throws IOException {
-        FileOperations fileOperations = new FileOperations("eMail.txt");
+        FileOperations fileOperations = new FileOperations("user.txt");
         fileOperations.start();
     }
 }
