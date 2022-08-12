@@ -3,12 +3,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileOperations {
-    private String fileName;
-    private File file;
-    private Scanner sc = new Scanner(System.in);
+    final private File file;
+    final private Scanner sc = new Scanner(System.in);
     FileOperations(String fileName) throws IOException  {
-        this.fileName = fileName;
-        this.file = getFile();
+        this.file = this.getFile(fileName);
     }
 
     public void start() throws IOException {
@@ -42,7 +40,7 @@ public class FileOperations {
         return inputMail;
     }
 
-    private File getFile() throws IOException {
+    private File getFile(String fileName) throws IOException {
         File file = new File(fileName);
         if(!file.exists()){
             file.createNewFile();
