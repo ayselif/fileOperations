@@ -54,8 +54,7 @@ public class FileOperations {
             return null;
         }
 
-        FileReader fileReader = new FileReader(userFile);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        BufferedReader bufferedReader = getBufferedReader(userFile);
 
         String userRecord;
         while ((userRecord = bufferedReader.readLine()) != null){
@@ -65,7 +64,7 @@ public class FileOperations {
             }
         }
 
-        fileReader.close();
+        bufferedReader.close();
         return null;
     }
 
@@ -113,10 +112,15 @@ public class FileOperations {
         user.password = newPassword;
     }
 
-    public ArrayList<String> getUsersListWithoutUser(File file, User user) throws IOException {
-        ArrayList <String> users = new ArrayList<String>();
+    private BufferedReader getBufferedReader(File file) throws IOException {
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
+        return bufferedReader;
+    }
+
+    public ArrayList<String> getUsersListWithoutUser(File file, User user) throws IOException {
+        ArrayList <String> users = new ArrayList<String>();
+        BufferedReader bufferedReader = getBufferedReader(file);
         String userInfo;
         while ((userInfo = bufferedReader.readLine()) != null) {
             User currentUser = parseRecord(userInfo);
@@ -124,7 +128,7 @@ public class FileOperations {
                 users.add(userInfo);
             }
         }
-
+        bufferedReader.close();
         return users;
     }
 
