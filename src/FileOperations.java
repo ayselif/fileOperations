@@ -122,14 +122,11 @@ public class FileOperations {
         String userInfo;
         while ((userInfo = bufferedReader.readLine()) != null) {
             User currentUser = parseRecord(userInfo);
-            System.out.println(currentUser.mail);
-            System.out.println(userInfo);
             if(!user.mail.equals(currentUser.mail)){
                 users.add(userInfo);
             }
         }
 
-        System.out.println(users);
         return users;
     }
 
