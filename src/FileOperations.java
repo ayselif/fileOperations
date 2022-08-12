@@ -1,12 +1,11 @@
 import java.io.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileOperations {
     private String fileName;
     private File file;
     private Scanner sc = new Scanner(System.in);
-
     FileOperations(String fileName) throws IOException  {
         this.fileName = fileName;
         this.file = getFile();
@@ -29,8 +28,8 @@ public class FileOperations {
         String password = getPassword();
 
         if(user.password.equals(password)){
-            System.out.println("Welcome" + user.name);
-            showMenu();
+            System.out.println("Welcome " + user.name);
+            showMenu(user);
         } else {
             System.out.println("Wrong password try again");
             checkPassword(user);
@@ -64,7 +63,7 @@ public class FileOperations {
         while ((userRecord = bufferedReader.readLine()) != null){
             User user = parseRecord(userRecord);
             if (user.mail.equals(mail)){
-                return user;
+              return user;
             }
         }
 
@@ -96,12 +95,51 @@ public class FileOperations {
         return password;
     }
 
+    private String getNewPassword(){
+        System.out.println("Enter your new password");
+        String newPassword = getPassword();
+        return newPassword;
+    }
+
+    private void writeNewPasswordToFile(File file, User user, String newPassword) throws IOException{
+        ArrayList<String> userInfoList = getUsersListWithoutUser(file, user);
+        FileWriter fileWriter = new FileWriter(file,false);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        String newUserInfo = user.name+";"+user.mail+";"+ newPassword;
+        userInfoList.add(newUserInfo);
+        String userInfoTextList =  String.join("\n", userInfoList);
+        bufferedWriter.write(userInfoTextList);
+        bufferedWriter.close();
+
+        user.password = newPassword;
+    }
+
+    public ArrayList<String> getUsersListWithoutUser(File file, User user) throws IOException {
+        ArrayList <String> users = new ArrayList<String>();
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String userInfo;
+        while ((userInfo = bufferedReader.readLine()) != null) {
+            User currentUser = parseRecord(userInfo);
+            System.out.println(currentUser.mail);
+            System.out.println(userInfo);
+            if(!user.mail.equals(currentUser.mail)){
+                users.add(userInfo);
+            }
+        }
+
+        System.out.println(users);
+        return users;
+    }
+
+
     private User parseRecord(String userInfo){
         String [] userInfoArr = userInfo.split(";",3);
         return new User(userInfoArr[0], userInfoArr[1], userInfoArr[2]);
     }
 
-    private void showMenu() throws IOException {
+    private void showMenu(User user) throws IOException {
         System.out.println("Select Option: " + "\n" +"For Exit: Press 1 "+"\n"+"For Change Password: Press 2 ");
         char select = sc.nextLine().charAt(0);
         switch (select){
@@ -109,11 +147,12 @@ public class FileOperations {
                 start();
                 break;
             case '2':
-                System.out.println("code will continue...");
+                String password = getNewPassword();
+                writeNewPasswordToFile(file,user,password);
                 break;
             default:
                 System.out.println("Wrong selection.");
-                showMenu();
+                showMenu(user);
         }
     }
 
